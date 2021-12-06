@@ -115,7 +115,3 @@ test_write_ppm :: proc() {
 
 	assert(cmp_slice(ppm, expected))
 }
-
-
-
-
