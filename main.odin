@@ -22,14 +22,6 @@ tick :: proc(env: Environment, proj: ^Projectile) {
 
 main :: proc() {
 	tuple_tests()
+	color_tests()
 
-	p := Projectile{new_point(0, 1, 0), normalize_tuple(new_vector(1, 1, 0))}
-	e := Environment{new_vector(0, -0.1, 0), new_vector(-0.01, 0, 0)}
-
-	for i in 0..100 {
-		tick(e, &p)
-		fmt.println("x: ", p.position.x)
-		fmt.println("y: ", p.position.y)
-		fmt.println("")
-	}
 }
