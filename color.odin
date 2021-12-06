@@ -46,6 +46,7 @@ mult_color_by_color :: proc(a: Color, b: Color) -> Color {
 	return Color{a.red * b.red, a.green * b.green, a.blue * b.blue}
 }
 
+
 color_tests :: proc() {
 	test_init()
 	test_add_color()

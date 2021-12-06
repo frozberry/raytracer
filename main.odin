@@ -23,5 +23,6 @@ tick :: proc(env: Environment, proj: ^Projectile) {
 main :: proc() {
 	tuple_tests()
 	color_tests()
+	canvas_tests()
 
 }
