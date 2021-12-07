@@ -27,6 +27,18 @@ cmp_slice :: proc(a: []u8, b: []u8) -> bool {
 	return true
 }
 
+cmp_slice_f64 :: proc(a: []f64, b: []f64) -> bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i in 0..<len(a) {
+		if !cmp_float(a[i], b[i]) {
+			return false
+		}
+	}
+	return true
+}
+
 sqrt :: proc(a: f64) -> f64 {
 	return math.pow(a, 0.5)
 }
