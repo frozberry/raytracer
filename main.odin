@@ -30,6 +30,7 @@ main :: proc() {
 	color_tests()
 	canvas_tests()
 	matrix_tests()
+	transformation_tests()
 
 	// pos := new_point(0, 0, 0)
 	// vel := normalize_tuple(new_vector(1, 1.8, 0))

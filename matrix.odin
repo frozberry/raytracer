@@ -39,11 +39,13 @@ new_identity_matrix :: proc() -> Matrix {
 }
 
 write_matrix :: proc(m: ^Matrix, row: int, col: int, write: f64) {
+	assert(row <= m.rows && col <= m.cols, "You are writing to a row/col that doesn't exist")
 	m.entries[row * m.cols + col] = write 
 	return
 }
 
 read_matrix :: proc(m: Matrix, row: int, col: int) -> f64{
+	assert(row <= m.rows && col <= m.cols, "You are reading a row/col that doesn't exist")
 	return m.entries[row * m.cols + col] 
 }
 
