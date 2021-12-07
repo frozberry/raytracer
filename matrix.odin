@@ -104,9 +104,16 @@ print_matrix :: proc(m: Matrix) {
 	fmt.println("")
 }
 
-determinate_two_by_two :: proc(m: Matrix) -> f64 {
-	assert(m.rows == 2 && m.cols == 2, "Must be 2x2 matrix")
-	return m.entries[0] * m.entries[3] - m.entries[1] * m.entries[2]
+determinate :: proc(m: Matrix) -> f64 {
+	if m.rows == 2 && m.cols == 2 {
+		return m.entries[0] * m.entries[3] - m.entries[1] * m.entries[2]
+	}
+
+	det := 0.0
+	for col in 0..<m.cols {
+		det += read_matrix(m, 0, col) * cofactor(m, 0, col)
+	}
+	return det
 }
 
 // Probably could be optimised
@@ -123,6 +130,44 @@ submatrix :: proc(m: Matrix, row: int, col: int) -> Matrix {
 	}
 
 	return new_matrix(m.rows - 1, m.cols - 1, e[:])
+}
+
+minor :: proc(m: Matrix, row: int, col: int) -> f64 {
+	s := submatrix(m, row, col)
+	return determinate(s)
+}
+
+cofactor :: proc(m: Matrix, row: int, col: int) -> f64 {
+	m := minor(m, row, col)
+	if (row + col) % 2 == 0 {
+		return m
+	} else {
+		return -(m)
+	}
+}
+
+is_ivertible :: proc(m: Matrix) -> bool {
+	return !cmp_float(determinate(m), 0)
+}
+
+inverse_matrix :: proc(m: Matrix) -> (Matrix, bool) {
+	if !is_ivertible(m) do return new_matrix(4, 4), false
+
+	m2 := new_matrix(m.rows, m.cols) 
+
+	determinate := determinate(m)
+
+	for row in 0..<m.rows {
+		for col in 0..<m.cols {
+			cofactor := cofactor(m, row, col)
+			val := cofactor / determinate
+
+			// col, row transposes
+			write_matrix(&m2, col, row, val)
+		}
+	}
+	
+	return m2, false
 }
 
 
@@ -144,6 +189,13 @@ matrix_tests :: proc() {
 	test_determinate_two_by_two()
 	test_submatrix()
 	test_submatrix_2()
+	test_minor()
+	test_cofactor()
+	test_determinate_three()
+	test_determinate_four()
+	test_inversion()
+	test_inversion_2()
+	test_inverse_returns_to_original()
 
 	return
 }
@@ -279,9 +331,8 @@ test_tranpose_identity :: proc() {
 
 test_determinate_two_by_two :: proc() {
 	a := new_matrix(2, 2, []f64{1, 5, -3, 2})
-	assert(cmp_float(determinate_two_by_two(a), 17))
+	assert(cmp_float(determinate(a), 17))
 }
-
 
 test_submatrix :: proc() {
 	a := new_matrix(3, 3, []f64{1, 5, 0, -3, 2, 7, 0, 6, -3})
@@ -294,4 +345,77 @@ test_submatrix_2 :: proc() {
 	expected := new_matrix(3, 3, []f64{-6, 1, 6, -8, 8, 6, -7, -1, 1})
 
 	assert(cmp_matrix(expected, submatrix(a, 2, 1)))
+}
+
+test_minor :: proc() {
+	a := new_matrix(3, 3, []f64{3, 5, 0, 2, -1, -7, 6, -1, 5})
+	expected := 25.0 
+
+	assert(cmp_float(expected, minor(a, 1, 0)))
+
+	b := submatrix(a, 1, 0)
+	assert(cmp_float(expected, determinate(b)))
+}
+
+test_cofactor :: proc() {
+	a := new_matrix(3, 3, []f64{3, 5, 0, 2, -1, -7, 6, -1, 5})
+
+	assert(cmp_float(-12, minor(a, 0, 0)))
+	assert(cmp_float(-12, cofactor(a, 0, 0)))
+
+	assert(cmp_float(25, minor(a, 1, 0)))
+	assert(cmp_float(-25, cofactor(a, 1, 0)))
+}
+
+test_determinate_three :: proc() {
+	a := new_matrix(3, 3, []f64{1,2,6,-5,8,-4,2,6,4})
+	assert(cmp_float(56, cofactor(a, 0, 0)))
+	assert(cmp_float(12, cofactor(a, 0, 1)))
+	assert(cmp_float(-46, cofactor(a, 0, 2)))
+	assert(cmp_float(-196, determinate(a)))
+}
+
+
+test_determinate_four :: proc() {
+	a := new_matrix(4, 4, []f64{-2,-8,3,5,-3,1,7,3,1,2,-9,6,-6,7,7,-9})
+	assert(cmp_float(690, cofactor(a, 0, 0)))
+	assert(cmp_float(447, cofactor(a, 0, 1)))
+	assert(cmp_float(210, cofactor(a, 0, 2)))
+	assert(cmp_float(51, cofactor(a, 0, 3)))
+	assert(cmp_float(-4071, determinate(a)))
+}
+
+test_inversion :: proc() {
+	a := new_matrix(4, 4, []f64{-5,2,6,-8, 1,-5,1,8, 7,7,-6,-7, 1,-3,7,4})
+	b, err := inverse_matrix(a)
+
+	assert(cmp_float(cofactor(a, 2, 3), -160))
+	assert(cmp_float(-(160.0/532.0), read_matrix(b, 3, 2)))
+	assert(cmp_float(cofactor(a, 3, 2), 105))
+
+	assert(cmp_float((105.0/532.0), read_matrix(b, 2, 3)))
+
+	expected_b := new_matrix(4, 4, []f64{0.21805, 0.45113, 0.24060, -0.04511, -0.80827, -1.45677, -0.44361, 0.52068, -0.07895, -0.22368, -0.05263, 0.19737, -0.52256, -0.81391, -0.30075, 0.30639})
+
+	assert(cmp_matrix(b, expected_b))
+}
+
+test_inversion_2 :: proc() {
+	a := new_matrix(4, 4, []f64{8,-5,9,2,7,5,6,1,-6,0,9,6,-3,0,-9,-4})
+	expected := new_matrix(4, 4, []f64{-0.15385, -0.15385, -0.28205, -0.53846,  -0.07692, 0.12308, 0.02564, 0.03077, 0.35897, 0.35897, 0.43590, 0.92308,  -0.69231, -0.69231, -0.76923, -1.92308})
+	actual, _ := inverse_matrix(a)
+
+	assert(cmp_matrix(actual, expected))
+}
+
+
+test_inverse_returns_to_original :: proc() {
+	a := new_matrix(4, 4, []f64{3,-9,7,3, 3,-8,2,-9, -4,4,4,1, -6,5,-1,1})
+	b := new_matrix(4, 4, []f64{8,2,2,2, 3,-1,7,0, 7,0,5,4, 6,-2,0,5})
+
+	c := mult_matrix(a, b)
+	ib, _ := inverse_matrix(b)
+
+	actual := mult_matrix(c, ib)
+	assert(cmp_matrix(actual, a))
 }
