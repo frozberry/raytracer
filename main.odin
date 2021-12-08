@@ -12,6 +12,7 @@ main :: proc() {
 	canvas_tests()
 	matrix_tests()
 	transformation_tests()
+	ray_tests()
 
 	draw_clock()
 }

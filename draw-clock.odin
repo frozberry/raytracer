@@ -16,7 +16,6 @@ draw_clock :: proc() {
 
 	for i in 0..<12 {
 		angle := f64(i) * (PI / 6)
-		fmt.println(degrees(angle))
 
 		rotation := new_rotation_y(f64(i) * PI / 6)
 		scaling := new_scaling(w_scaling, 0, h_scaling)
