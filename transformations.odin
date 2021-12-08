@@ -1,5 +1,7 @@
 package main
 import "core:fmt"
+import "core:math"
+
 
 new_translation :: proc(x: f64, y: f64, z: f64) -> Matrix {
 	i := new_identity_matrix()
@@ -18,6 +20,36 @@ new_scaling :: proc(x: f64, y: f64, z: f64) -> Matrix {
 	return i
 }
 
+new_rotation_x :: proc(r: f64) -> Matrix {
+	i := new_identity_matrix()
+
+	write_matrix(&i, 1, 1, math.cos(r))
+	write_matrix(&i, 1, 2, -math.sin(r))
+	write_matrix(&i, 2, 1, math.sin(r))
+	write_matrix(&i, 2, 2, math.cos(r))
+	return i
+}
+
+new_rotation_y :: proc(r: f64) -> Matrix {
+	i := new_identity_matrix()
+
+	write_matrix(&i, 0, 0, math.cos(r))
+	write_matrix(&i, 0, 2, math.sin(r))
+	write_matrix(&i, 2, 0, -math.sin(r))
+	write_matrix(&i, 2, 2, math.cos(r))
+	return i
+}
+
+new_rotation_z :: proc(r: f64) -> Matrix {
+	i := new_identity_matrix()
+
+	write_matrix(&i, 0, 0, math.cos(r))
+	write_matrix(&i, 0, 1, -math.sin(r))
+	write_matrix(&i, 1, 0, math.sin(r))
+	write_matrix(&i, 1, 1, math.cos(r))
+	return i
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                    Tests                                   */
 /* -------------------------------------------------------------------------- */
@@ -29,6 +61,10 @@ transformation_tests :: proc() {
 	test_scaling_vector()
 	test_scaling_inverse()
 	test_reflection()
+	test_rotation_x()
+	test_inverse_rotation_x()
+	test_rotation_y()
+	test_rotation_z()
 }
 
 test_multiply_by_translation_matrix :: proc() {
@@ -95,4 +131,60 @@ test_reflection :: proc() {
 	a := mult_matrix_by_tuple(t, p)
 	e := new_point(-2, 3, 4)
 	assert(cmp_tuple(a, e))
+}
+
+test_rotation_x :: proc() {
+	p := new_point(0, 1, 0)
+	hq := new_rotation_x(PI / 4)
+	fq := new_rotation_x(PI / 2)
+
+	e1 := new_point(0, math.pow(f64(2), 0.5)/ 2, math.pow(f64(2), 0.5)/ 2)
+	e2 := new_point(0, 0, 1)
+
+	a1 := mult_matrix_by_tuple(hq, p)
+	a2 := mult_matrix_by_tuple(fq, p)
+
+	assert_tuple(a1, e1)
+	assert_tuple(a2, e2)
+}
+
+
+test_inverse_rotation_x :: proc() {
+	p := new_point(0, 1, 0)
+	hq := new_rotation_x(PI / 4)
+	inv, _ := inverse_matrix(hq)
+
+	e := new_point(0, math.pow(f64(2), 0.5)/ 2, -math.pow(f64(2), 0.5)/ 2)
+	a := mult_matrix_by_tuple(inv, p)
+	assert_tuple(a, e)
+}
+
+test_rotation_y :: proc() {
+	p := new_point(0, 0, 1)
+	hq := new_rotation_y(PI / 4)
+	fq := new_rotation_y(PI / 2)
+
+	e1 := new_point(math.pow(f64(2), 0.5)/ 2, 0, math.pow(f64(2), 0.5)/ 2)
+	e2 := new_point(1, 0, 0)
+
+	a1 := mult_matrix_by_tuple(hq, p)
+	a2 := mult_matrix_by_tuple(fq, p)
+
+	assert_tuple(a1, e1)
+	assert_tuple(a2, e2)
+}
+
+test_rotation_z :: proc() {
+	p := new_point(0, 1, 0)
+	hq := new_rotation_z(PI / 4)
+	fq := new_rotation_z(PI / 2)
+
+	e1 := new_point(-math.pow(f64(2), 0.5)/ 2, math.pow(f64(2), 0.5)/ 2, 0)
+	e2 := new_point(-1, 0, 0)
+
+	a1 := mult_matrix_by_tuple(hq, p)
+	a2 := mult_matrix_by_tuple(fq, p)
+
+	assert_tuple(a1, e1)
+	assert_tuple(a2, e2)
 }

@@ -66,3 +66,35 @@ clamp_255 :: proc(n: int) -> int{
 		return n
 	}
 }
+
+radians :: proc(n: f64) -> f64 {
+	return (n * math.PI) / 180	
+}
+
+PI :: math.PI
+
+assert_matrix :: proc(a: Matrix, b: Matrix)  {
+	if !(cmp_matrix(a, b)) {
+		print_matrix(a)
+		print_matrix(b)
+	}
+	assert(cmp_matrix(a, b))
+	return
+}
+
+assert_tuple :: proc(a: Tuple, b: Tuple)  {
+	if !cmp_tuple(a, b) {
+		fmt.println(a)
+		fmt.println(b)
+	}
+	assert(cmp_tuple(a, b))
+	return
+}
+
+assert_f64 :: proc(a: f64, b: f64)  {
+	fmt.println(a)
+	fmt.println(b)
+	assert(cmp_float(a, b))
+	return
+}
+
