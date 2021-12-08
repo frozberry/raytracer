@@ -50,6 +50,19 @@ new_rotation_z :: proc(r: f64) -> Matrix {
 	return i
 }
 
+new_shearing :: proc(xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Matrix {
+	i := new_identity_matrix()
+
+	write_matrix(&i, 0, 1, xy)
+	write_matrix(&i, 0, 2, xz)
+	write_matrix(&i, 1, 0, yx)
+	write_matrix(&i, 1, 2, yz)
+	write_matrix(&i, 2, 0, zx)
+	write_matrix(&i, 2, 1, zy)
+
+	return i
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                    Tests                                   */
 /* -------------------------------------------------------------------------- */
@@ -65,6 +78,13 @@ transformation_tests :: proc() {
 	test_inverse_rotation_x()
 	test_rotation_y()
 	test_rotation_z()
+	test_shearing_1()
+	test_shearing_2()
+	test_shearing_3()
+	test_shearing_4()
+	test_shearing_5()
+	test_shearing_6()
+
 }
 
 test_multiply_by_translation_matrix :: proc() {
@@ -187,4 +207,61 @@ test_rotation_z :: proc() {
 
 	assert_tuple(a1, e1)
 	assert_tuple(a2, e2)
+}
+
+test_shearing_1 :: proc() {
+	s := new_shearing(1, 0, 0, 0, 0, 0)
+	p := new_point(2, 3, 4)
+
+	a := mult_matrix_by_tuple(s, p)
+	e := new_point(5, 3, 4)
+
+	assert_tuple(a, e)
+}
+
+test_shearing_2 :: proc() {
+	s := new_shearing(0, 1, 0, 0, 0, 0)
+	p := new_point(2, 3, 4)
+
+	a := mult_matrix_by_tuple(s, p)
+	e := new_point(6, 3, 4)
+
+	assert_tuple(a, e)
+}
+
+test_shearing_3 :: proc() {
+	s := new_shearing(0, 0, 1, 0, 0, 0)
+	p := new_point(2, 3, 4)
+
+	a := mult_matrix_by_tuple(s, p)
+	e := new_point(2, 5, 4)
+
+	assert_tuple(a, e)
+}
+test_shearing_4 :: proc() {
+	s := new_shearing(0, 0, 0, 1, 0, 0)
+	p := new_point(2, 3, 4)
+
+	a := mult_matrix_by_tuple(s, p)
+	e := new_point(2, 7, 4)
+
+	assert_tuple(a, e)
+}
+test_shearing_5 :: proc() {
+	s := new_shearing(0, 0, 0, 0, 1, 0)
+	p := new_point(2, 3, 4)
+
+	a := mult_matrix_by_tuple(s, p)
+	e := new_point(2, 3, 6)
+
+	assert_tuple(a, e)
+}
+test_shearing_6 :: proc() {
+	s := new_shearing(0, 0, 0, 0, 0, 1)
+	p := new_point(2, 3, 4)
+
+	a := mult_matrix_by_tuple(s, p)
+	e := new_point(2, 3, 7)
+
+	assert_tuple(a, e)
 }
