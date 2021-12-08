@@ -13,4 +13,5 @@ main :: proc() {
 	matrix_tests()
 	transformation_tests()
 
+	draw_clock()
 }

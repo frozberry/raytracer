@@ -67,11 +67,15 @@ clamp_255 :: proc(n: int) -> int{
 	}
 }
 
+PI :: math.PI
+
 radians :: proc(n: f64) -> f64 {
-	return (n * math.PI) / 180	
+	return (n * PI) / 180	
 }
 
-PI :: math.PI
+degrees :: proc(n: f64) -> f64 {
+	return (n * 180) / PI
+}
 
 assert_matrix :: proc(a: Matrix, b: Matrix)  {
 	if !(cmp_matrix(a, b)) {
