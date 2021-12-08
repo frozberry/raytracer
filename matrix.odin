@@ -410,7 +410,6 @@ test_inversion_2 :: proc() {
 	assert(cmp_matrix(actual, expected))
 }
 
-
 test_inverse_returns_to_original :: proc() {
 	a := new_matrix(4, 4, []f64{3,-9,7,3, 3,-8,2,-9, -4,4,4,1, -6,5,-1,1})
 	b := new_matrix(4, 4, []f64{8,2,2,2, 3,-1,7,0, 7,0,5,4, 6,-2,0,5})
