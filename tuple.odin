@@ -8,33 +8,43 @@ Tuple :: struct {
 }
 
 new_tuple :: proc(x: f64, y: f64, z: f64, w: f64) -> Tuple {
-	return Tuple {x, y, z, w}
+	return Tuple{x, y, z, w}
 }
 
 new_point :: proc(x: f64, y: f64, z: f64) -> Tuple {
-	return Tuple {x, y, z, 1.0}
+	return Tuple{x, y, z, 1.0}
 }
 
 new_vector :: proc(x: f64, y: f64, z: f64) -> Tuple {
-	return Tuple {x, y, z, 0.0}
+	return Tuple{x, y, z, 0.0}
 }
 
 cmp_tuple :: proc(a: Tuple, b: Tuple) -> bool {
-	x := cmp_float(a.x, b.x) 
-	y := cmp_float(a.y, b.y) 
-	z := cmp_float(a.z, b.z) 
-	w := cmp_float(a.w, b.w) 
+	x := cmp_float(a.x, b.x)
+	y := cmp_float(a.y, b.y)
+	z := cmp_float(a.z, b.z)
+	w := cmp_float(a.w, b.w)
 	return x && y && z && w
 }
 
 add_tuple :: proc(a: Tuple, b: Tuple) -> Tuple {
-	t := Tuple{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w}
+	t := Tuple {
+		a.x + b.x,
+		a.y + b.y,
+		a.z + b.z,
+		a.w + b.w,
+	}
 	assert(!cmp_float(t.w, 2.0))
 	return t
 }
 
 sub_tuple :: proc(a: Tuple, b: Tuple) -> Tuple {
-	t := Tuple{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w}
+	t := Tuple {
+		a.x - b.x,
+		a.y - b.y,
+		a.z - b.z,
+		a.w - b.w,
+	}
 	return t
 }
 
@@ -51,7 +61,7 @@ div_tuple :: proc(a: Tuple, b: f64) -> Tuple {
 }
 
 magnitude_tuple :: proc(a: Tuple) -> f64 {
-	sum := sqr(a.x) + sqr(a.y) + sqr(a.z) + sqr(a.w) 
+	sum := sqr(a.x) + sqr(a.y) + sqr(a.z) + sqr(a.w)
 	return sqrt(sum)
 }
 
@@ -89,10 +99,25 @@ tuple_tests :: proc() {
 	assert(!cmp_tuple(p, v))
 
 	// Add tuples
-	a1 := Tuple{3, -2, 5, 1}
-	a2 := Tuple{-2, 3, 1, 0}
+	a1 := Tuple {
+		3,
+		-2,
+		5,
+		1,
+	}
+	a2 := Tuple {
+		-2,
+		3,
+		1,
+		0,
+	}
 	added := add_tuple(a1, a2)
-	add_expected := Tuple{1, 1, 6, 1}
+	add_expected := Tuple {
+		1,
+		1,
+		6,
+		1,
+	}
 	assert(cmp_tuple(added, add_expected))
 
 	// Sub tuples
@@ -122,63 +147,63 @@ tuple_tests :: proc() {
 }
 
 test_sub :: proc() {
-	a := new_point(3, 2, 1)	
-	b := new_point(5, 6, 7)	
+	a := new_point(3, 2, 1)
+	b := new_point(5, 6, 7)
 	actual := sub_tuple(a, b)
-	expected := new_vector(-2, -4, -6) 
+	expected := new_vector(-2, -4, -6)
 	assert(cmp_tuple(actual, expected))
 }
 
 test_sub2 :: proc() {
-	a := new_point(3, 2, 1)	
-	b := new_vector(5, 6, 7)	
+	a := new_point(3, 2, 1)
+	b := new_vector(5, 6, 7)
 	actual := sub_tuple(a, b)
-	expected := new_point(-2, -4, -6) 
+	expected := new_point(-2, -4, -6)
 	assert(cmp_tuple(actual, expected))
 }
 
 test_sub3 :: proc() {
-	a := new_vector(3, 2, 1)	
-	b := new_vector(5, 6, 7)	
+	a := new_vector(3, 2, 1)
+	b := new_vector(5, 6, 7)
 	actual := sub_tuple(a, b)
-	expected := new_vector(-2, -4, -6) 
+	expected := new_vector(-2, -4, -6)
 	assert(cmp_tuple(actual, expected))
 }
 
 test_sub_from_zero :: proc() {
-	a := new_vector(0, 0, 0)	
-	b := new_vector(1, -2, 3)	
+	a := new_vector(0, 0, 0)
+	b := new_vector(1, -2, 3)
 	actual := sub_tuple(a, b)
-	expected := new_vector(-1, 2, -3) 
+	expected := new_vector(-1, 2, -3)
 	assert(cmp_tuple(actual, expected))
 }
 
 test_negate :: proc() {
-	a := new_tuple(1, -2, 3, -4)	
+	a := new_tuple(1, -2, 3, -4)
 	actual := negate_tuple(a)
-	expected := new_tuple(-1, 2, -3, 4) 
+	expected := new_tuple(-1, 2, -3, 4)
 	assert(cmp_tuple(actual, expected))
 }
 
 test_mult :: proc() {
-	a := new_tuple(1, -2, 3, -4)	
+	a := new_tuple(1, -2, 3, -4)
 	actual := mult_tuple(a, 3.5)
-	expected := new_tuple(3.5, -7, 10.5, -14) 
+	expected := new_tuple(3.5, -7, 10.5, -14)
 	assert(cmp_tuple(actual, expected))
 }
 
 test_mult2 :: proc() {
-	a := new_tuple(1, -2, 3, -4)	
+	a := new_tuple(1, -2, 3, -4)
 	actual := mult_tuple(a, 0.5)
-	expected := new_tuple(0.5, -1, 1.5, -2) 
+	expected := new_tuple(0.5, -1, 1.5, -2)
 	assert(cmp_tuple(actual, expected))
 }
 
 
 test_div :: proc() {
-	a := new_tuple(1, -2, 3, -4)	
+	a := new_tuple(1, -2, 3, -4)
 	actual := div_tuple(a, 2)
-	expected := new_tuple(0.5, -1, 1.5, -2) 
+	expected := new_tuple(0.5, -1, 1.5, -2)
 	assert(cmp_tuple(actual, expected))
 }
 
@@ -203,39 +228,39 @@ test_magnitudes :: proc() {
 }
 
 test_norm :: proc() {
-	a := new_vector(4, 0, 0)	
+	a := new_vector(4, 0, 0)
 	actual := normalize_tuple(a)
-	expected := new_vector(1, 0, 0) 
+	expected := new_vector(1, 0, 0)
 	assert(cmp_tuple(actual, expected))
 }
 
 test_norm2 :: proc() {
-	a := new_vector(1, 2, 3)	
+	a := new_vector(1, 2, 3)
 	actual := normalize_tuple(a)
-	expected := new_vector(1/sqrt(14), 2/sqrt(14), 3/sqrt(14)) 
+	expected := new_vector(1 / sqrt(14), 2 / sqrt(14), 3 / sqrt(14))
 	assert(cmp_tuple(actual, expected))
 }
 
 test_dot :: proc() {
-	a := new_vector(1, 2, 3)	
-	b := new_vector(2, 3, 4)	
+	a := new_vector(1, 2, 3)
+	b := new_vector(2, 3, 4)
 	actual := dot(a, b)
 	expected := 20.0
 	assert(cmp_float(actual, expected))
 }
 
 test_cross :: proc() {
-	a := new_vector(1, 2, 3)	
-	b := new_vector(2, 3, 4)	
+	a := new_vector(1, 2, 3)
+	b := new_vector(2, 3, 4)
 	actual := cross(a, b)
-	expected := new_vector(-1, 2, -1) 
+	expected := new_vector(-1, 2, -1)
 	assert(cmp_tuple(actual, expected))
 }
 
 test_cross2 :: proc() {
-	a := new_vector(1, 2, 3)	
-	b := new_vector(2, 3, 4)	
+	a := new_vector(1, 2, 3)
+	b := new_vector(2, 3, 4)
 	actual := cross(b, a)
-	expected := new_vector(1, -2, 1) 
+	expected := new_vector(1, -2, 1)
 	assert(cmp_tuple(actual, expected))
 }

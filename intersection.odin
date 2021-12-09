@@ -1,9 +1,9 @@
 package main
 import "core:fmt"
 import "core:math/bits"
- 
+
 Intersection :: struct {
-	t: f64,
+	t:      f64,
 	object: Sphere,
 }
 
@@ -11,15 +11,15 @@ new_intersection :: proc(t: f64, object: Sphere) -> Intersection {
 	return Intersection{t, object}
 }
 
-intersections :: proc(intersections: ..Intersection) -> []Intersection{
-	return intersections	
+intersections :: proc(intersections: .. Intersection) -> []Intersection {
+	return intersections
 }
 
 first_hit :: proc(intersections: []Intersection) -> (Intersection, bool) {
 	assert(len(intersections) > 0, "Empty slice passed into first_hit()")
 	// Creates a new intersection with max t for the compare to work
 	// Maybe a better way to do this?
-	i := new_intersection(f64(bits.U32_MAX), new_sphere()) 
+	i := new_intersection(f64(bits.U32_MAX), new_sphere())
 	hit := false
 
 	for inter in intersections {
@@ -32,10 +32,10 @@ first_hit :: proc(intersections: []Intersection) -> (Intersection, bool) {
 }
 
 
-
 /* -------------------------------------------------------------------------- */
 /*                                    Tests                                   */
 /* -------------------------------------------------------------------------- */
+
 
 intersection_tests :: proc() {
 	test_new_intersection()

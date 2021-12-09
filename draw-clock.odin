@@ -14,17 +14,17 @@ draw_clock :: proc() {
 	white := new_color(255, 255, 255)
 	twelve := new_point(0, 0, 1)
 
-	for i in 0..<12 {
+	for i in 0 ..< 12 {
 		angle := f64(i) * (PI / 6)
 
 		rotation := new_rotation_y(f64(i) * PI / 6)
 		scaling := new_scaling(w_scaling, 0, h_scaling)
 		transformation := combine_transformations(rotation, scaling)
 
-		point: = mult_matrix_by_tuple(transformation, twelve)
+		point := mult_matrix_by_tuple(transformation, twelve)
 		w, h := point_to_w_h(point)
 
-		write_pixel(&canvas, w, h, white )
+		write_pixel(&canvas, w, h, white)
 	}
 
 	ppm := canvas_to_ppm(canvas)

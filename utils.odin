@@ -26,12 +26,12 @@ append_bytes :: proc(arr: ^[dynamic]u8, add: string) {
 }
 
 int_to_string :: proc(n: int) -> string {
-	return fmt.tprintf("%v", n) 
+	return fmt.tprintf("%v", n)
 }
 
-clamp_255 :: proc(n: int) -> int{
+clamp_255 :: proc(n: int) -> int {
 	if n > 255 {
-		return 255 
+		return 255
 	} else if n < 0 {
 		return 0
 	} else {
@@ -42,14 +42,14 @@ clamp_255 :: proc(n: int) -> int{
 PI :: math.PI
 
 radians :: proc(n: f64) -> f64 {
-	return (n * PI) / 180	
+	return (n * PI) / 180
 }
 
 degrees :: proc(n: f64) -> f64 {
 	return (n * 180) / PI
 }
 
-assert_matrix :: proc(a: Matrix, b: Matrix)  {
+assert_matrix :: proc(a: Matrix, b: Matrix) {
 	if !(cmp_matrix(a, b)) {
 		print_matrix(a)
 		print_matrix(b)
@@ -58,7 +58,7 @@ assert_matrix :: proc(a: Matrix, b: Matrix)  {
 	return
 }
 
-assert_tuple :: proc(a: Tuple, b: Tuple)  {
+assert_tuple :: proc(a: Tuple, b: Tuple) {
 	if !cmp_tuple(a, b) {
 		fmt.println(a)
 		fmt.println(b)
@@ -67,10 +67,9 @@ assert_tuple :: proc(a: Tuple, b: Tuple)  {
 	return
 }
 
-assert_f64 :: proc(a: f64, b: f64)  {
+assert_f64 :: proc(a: f64, b: f64) {
 	fmt.println(a)
 	fmt.println(b)
 	assert(cmp_float(a, b))
 	return
 }
-

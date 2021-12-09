@@ -4,7 +4,7 @@ import "core:math/rand"
 import "core:fmt"
 
 Sphere :: struct {
-	id: u64,
+	id:        u64,
 	transform: Matrix,
 }
 
@@ -25,8 +25,6 @@ sphere_tests :: proc() {
 	test_change_sphere_transformation()
 	test_intersect_scaled_sphere_with_ray()
 	test_intersect_translated_sphere_with_ray()
-	
-	
 }
 
 test_sphere_transformation :: proc() {

@@ -9,7 +9,7 @@ cmp_slice :: proc(a: []u8, b: []u8) -> bool {
 	if len(a) != len(b) {
 		return false
 	}
-	for i in 0..<len(a) {
+	for i in 0 ..< len(a) {
 		if a[i] != b[i] {
 			return false
 		}
@@ -21,7 +21,7 @@ cmp_slice_f64 :: proc(a: []f64, b: []f64) -> bool {
 	if len(a) != len(b) {
 		return false
 	}
-	for i in 0..<len(a) {
+	for i in 0 ..< len(a) {
 		if !cmp_float(a[i], b[i]) {
 			return false
 		}

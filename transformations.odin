@@ -63,11 +63,11 @@ new_shearing :: proc(xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Ma
 	return i
 }
 
-combine_transformations :: proc(m: ..Matrix) -> Matrix{
+combine_transformations :: proc(m: .. Matrix) -> Matrix {
 	assert(len(m) >= 2, "Must combine at least 2 transformations")
-	combined := mult_matrix(m[0], m[1]) 
+	combined := mult_matrix(m[0], m[1])
 
-	for i in 2..<len(m) {
+	for i in 2 ..< len(m) {
 		combined = mult_matrix(m[i], combined)
 	}
 	return combined
@@ -104,7 +104,7 @@ test_multiply_by_translation_matrix :: proc() {
 
 	a := mult_matrix_by_tuple(t, p)
 	e := new_point(2, 1, 7)
-	
+
 	assert(cmp_tuple(a, e))
 }
 
@@ -169,7 +169,7 @@ test_rotation_x :: proc() {
 	hq := new_rotation_x(PI / 4)
 	fq := new_rotation_x(PI / 2)
 
-	e1 := new_point(0, math.pow(f64(2), 0.5)/ 2, math.pow(f64(2), 0.5)/ 2)
+	e1 := new_point(0, math.pow(f64(2), 0.5) / 2, math.pow(f64(2), 0.5) / 2)
 	e2 := new_point(0, 0, 1)
 
 	a1 := mult_matrix_by_tuple(hq, p)
@@ -185,7 +185,7 @@ test_inverse_rotation_x :: proc() {
 	hq := new_rotation_x(PI / 4)
 	inv, _ := inverse_matrix(hq)
 
-	e := new_point(0, math.pow(f64(2), 0.5)/ 2, -math.pow(f64(2), 0.5)/ 2)
+	e := new_point(0, math.pow(f64(2), 0.5) / 2, -math.pow(f64(2), 0.5) / 2)
 	a := mult_matrix_by_tuple(inv, p)
 	assert_tuple(a, e)
 }
@@ -195,7 +195,7 @@ test_rotation_y :: proc() {
 	hq := new_rotation_y(PI / 4)
 	fq := new_rotation_y(PI / 2)
 
-	e1 := new_point(math.pow(f64(2), 0.5)/ 2, 0, math.pow(f64(2), 0.5)/ 2)
+	e1 := new_point(math.pow(f64(2), 0.5) / 2, 0, math.pow(f64(2), 0.5) / 2)
 	e2 := new_point(1, 0, 0)
 
 	a1 := mult_matrix_by_tuple(hq, p)
@@ -210,7 +210,7 @@ test_rotation_z :: proc() {
 	hq := new_rotation_z(PI / 4)
 	fq := new_rotation_z(PI / 2)
 
-	e1 := new_point(-math.pow(f64(2), 0.5)/ 2, math.pow(f64(2), 0.5)/ 2, 0)
+	e1 := new_point(-math.pow(f64(2), 0.5) / 2, math.pow(f64(2), 0.5) / 2, 0)
 	e2 := new_point(-1, 0, 0)
 
 	a1 := mult_matrix_by_tuple(hq, p)
@@ -308,7 +308,7 @@ test_transformations_in_reverse_order :: proc() {
 
 	t := combine_transformations(a, b, c)
 	actual := mult_matrix_by_tuple(t, p)
-	
+
 	e := new_point(15, 0, 7)
 	assert_tuple(actual, e)
 }

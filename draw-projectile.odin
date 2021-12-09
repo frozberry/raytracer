@@ -8,11 +8,11 @@ Projectile :: struct {
 
 Environment :: struct {
 	gravity: Tuple,
-	wind: Tuple,
+	wind:    Tuple,
 }
 
 tick :: proc(env: Environment, proj: ^Projectile) {
-	proj.position = add_tuple(proj.position, proj.velocity) 
+	proj.position = add_tuple(proj.position, proj.velocity)
 	proj.velocity = add_tuple(proj.velocity, add_tuple(env.gravity, env.wind))
 }
 
@@ -29,8 +29,14 @@ draw_projectile :: proc() {
 	gravity := new_vector(0, -0.1, 0)
 	wind := new_vector(-0.01, 0.0, 0)
 
-	p := Projectile{pos, vel}
-	e := Environment{gravity, wind}
+	p := Projectile {
+		pos,
+		vel,
+	}
+	e := Environment {
+		gravity,
+		wind,
+	}
 	canvas := new_canvas(900, 500)
 	white := new_color(1, 1, 1)
 
@@ -72,7 +78,7 @@ x_to_width :: proc(x: f64, max: f64) -> int {
 }
 
 y_to_height :: proc(y: f64, max: f64) -> int {
-	max_with_offset := max * 0.9 
+	max_with_offset := max * 0.9
 	compressed := y * (max_with_offset / 500)
 	reversed := 499 - int(compressed)
 	negative := reversed < 0

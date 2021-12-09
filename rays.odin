@@ -3,23 +3,23 @@ import "core:math"
 import "core:fmt"
 
 Ray :: struct {
-	origin: Tuple,
+	origin:    Tuple,
 	direction: Tuple,
 }
 
 new_ray :: proc(origin: Tuple, direction: Tuple) -> Ray {
-	return Ray {origin, direction}	
+	return Ray{origin, direction}
 }
 
 ray_position :: proc(ray: Ray, t: f64) -> Tuple {
 	distance := mult_tuple(ray.direction, t)
 	new_position := add_tuple(ray.origin, distance)
-	return new_position	
+	return new_position
 }
 
 // Returns the t values where of an intersection
 intersect :: proc(sphere: Sphere, r: Ray) -> ([2]Intersection, bool) {
-	intersections: [2]Intersection
+	intersections: [2]Intersection 
 
 	// Apply the sphere's transform to the ray
 	ray_transform, _ := inverse_matrix(sphere.transform)
@@ -40,7 +40,7 @@ intersect :: proc(sphere: Sphere, r: Ray) -> ([2]Intersection, bool) {
 	t1 := (-b - math.pow(discriminant, 0.5)) / (2 * a)
 	t2 := (-b + math.pow(discriminant, 0.5)) / (2 * a)
 
-	intersections[0] = new_intersection(t1, sphere) 
+	intersections[0] = new_intersection(t1, sphere)
 	intersections[1] = new_intersection(t2, sphere)
 
 	return intersections, true
@@ -64,7 +64,7 @@ ray_tests :: proc() {
 	test_scale_ray()
 }
 
-test_new_ray :: proc() { 
+test_new_ray :: proc() {
 	o := new_point(1, 2, 3)
 	d := new_vector(4, 5, 6)
 	r := new_ray(o, d)
@@ -74,7 +74,7 @@ test_new_ray :: proc() {
 }
 
 test_point_from_distance :: proc() {
-	r  := new_ray(new_point(2, 3, 4), new_vector(1, 0, 0))
+	r := new_ray(new_point(2, 3, 4), new_vector(1, 0, 0))
 
 	assert(cmp_tuple(ray_position(r, 0), new_point(2, 3, 4)))
 	assert(cmp_tuple(ray_position(r, 1), new_point(3, 3, 4)))
@@ -83,7 +83,7 @@ test_point_from_distance :: proc() {
 }
 
 test_ray_sphere_intersect :: proc() {
-	r  := new_ray(new_point(0, 0, -5), new_vector(0, 0, 1))
+	r := new_ray(new_point(0, 0, -5), new_vector(0, 0, 1))
 	s := new_sphere()
 	xs, hit := intersect(s, r)
 
@@ -94,7 +94,7 @@ test_ray_sphere_intersect :: proc() {
 }
 
 test_intersect_tangent :: proc() {
-	r  := new_ray(new_point(0, 1, -5), new_vector(0, 0, 1))
+	r := new_ray(new_point(0, 1, -5), new_vector(0, 0, 1))
 	s := new_sphere()
 	xs, hit := intersect(s, r)
 
@@ -104,7 +104,7 @@ test_intersect_tangent :: proc() {
 }
 
 test_miss_sphere :: proc() {
-	r  := new_ray(new_point(0, 2, -5), new_vector(0, 0, 1))
+	r := new_ray(new_point(0, 2, -5), new_vector(0, 0, 1))
 	s := new_sphere()
 	xs, hit := intersect(s, r)
 
@@ -115,7 +115,7 @@ test_miss_sphere :: proc() {
 
 
 test_inside_sphere :: proc() {
-	r  := new_ray(new_point(0, 0, 0), new_vector(0, 0, 1))
+	r := new_ray(new_point(0, 0, 0), new_vector(0, 0, 1))
 	s := new_sphere()
 	xs, hit := intersect(s, r)
 
@@ -126,7 +126,7 @@ test_inside_sphere :: proc() {
 
 
 test_sphere_is_behind_ray :: proc() {
-	r  := new_ray(new_point(0, 0, 5), new_vector(0, 0, 1))
+	r := new_ray(new_point(0, 0, 5), new_vector(0, 0, 1))
 	s := new_sphere()
 	xs, hit := intersect(s, r)
 

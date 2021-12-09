@@ -1,9 +1,9 @@
 package main
 
 Color :: struct {
-	red: f64,
+	red:   f64,
 	green: f64,
-	blue: f64,
+	blue:  f64,
 }
 
 new_color :: proc(red: f64, green: f64, blue: f64) -> Color {
@@ -11,19 +11,27 @@ new_color :: proc(red: f64, green: f64, blue: f64) -> Color {
 }
 
 cmp_color :: proc(a: Color, b: Color) -> bool {
-	red := cmp_float(a.red, b.red) 
-	green := cmp_float(a.green, b.green) 
-	blue := cmp_float(a.blue, b.blue) 
-	return red && green && blue 
+	red := cmp_float(a.red, b.red)
+	green := cmp_float(a.green, b.green)
+	blue := cmp_float(a.blue, b.blue)
+	return red && green && blue
 }
 
 add_color :: proc(a: Color, b: Color) -> Color {
-	t := Color{a.red + b.red, a.green + b.green, a.blue + b.blue}
+	t := Color {
+		a.red + b.red,
+		a.green + b.green,
+		a.blue + b.blue,
+	}
 	return t
 }
 
 sub_color :: proc(a: Color, b: Color) -> Color {
-	t := Color{a.red - b.red, a.green - b.green, a.blue - b.blue}
+	t := Color {
+		a.red - b.red,
+		a.green - b.green,
+		a.blue - b.blue,
+	}
 	return t
 }
 
@@ -46,7 +54,6 @@ mult_color_by_color :: proc(a: Color, b: Color) -> Color {
 	return Color{a.red * b.red, a.green * b.green, a.blue * b.blue}
 }
 
-
 color_tests :: proc() {
 	test_init()
 	test_add_color()
@@ -60,7 +67,11 @@ color_tests :: proc() {
 /* -------------------------------------------------------------------------- */
 
 test_init :: proc() {
-	c := Color{-0.5, 0.4, 1.7}
+	c := Color {
+		-0.5,
+		0.4,
+		1.7,
+	}
 	assert(cmp_float(c.red, -0.5))
 	assert(cmp_float(c.green, 0.4))
 	assert(cmp_float(c.blue, 1.7))
