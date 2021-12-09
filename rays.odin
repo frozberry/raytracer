@@ -40,7 +40,13 @@ intersect :: proc(sphere: Sphere, ray: Ray) -> ([2]Intersection, bool) {
 
 	return intersections, true
 }
- 
+
+transform_ray :: proc(ray: Ray, transform: Matrix) -> Ray {
+	origin := mult_matrix_by_tuple(transform, ray.origin)
+	direction := mult_matrix_by_tuple(transform, ray.direction)
+	return new_ray(origin, direction)
+}
+
 ray_tests :: proc() {
 	test_new_ray()
 	test_point_from_distance()
@@ -49,8 +55,8 @@ ray_tests :: proc() {
 	test_miss_sphere()
 	test_inside_sphere()
 	test_sphere_is_behind_ray()
-
-	
+	test_translate_ray()
+	test_scale_ray()
 }
 
 test_new_ray :: proc() { 
@@ -124,3 +130,19 @@ test_sphere_is_behind_ray :: proc() {
 	assert(cmp_float(xs[1].t, -4.0))
 }
 
+test_translate_ray :: proc() {
+	r := new_ray(new_point(1, 2, 3), new_vector(0, 1, 0))
+	m := new_translation(3, 4, 5)
+	r2 := transform_ray(r, m)
+	assert(cmp_tuple(r2.origin, new_point(4, 6, 8)))
+	assert(cmp_tuple(r2.direction, new_vector(0, 1, 0)))
+}
+
+test_scale_ray :: proc() {
+	r := new_ray(new_point(1, 2, 3), new_vector(0, 1, 0))
+	m := new_scaling(2, 3, 4)
+	r2 := transform_ray(r, m)
+
+	assert(cmp_tuple(r2.origin, new_point(2, 6, 12)))
+	assert(cmp_tuple(r2.direction, new_vector(0, 3, 0)))
+}
