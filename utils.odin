@@ -39,6 +39,16 @@ cmp_slice_f64 :: proc(a: []f64, b: []f64) -> bool {
 	return true
 }
 
+cmp_sphere :: proc(a: Sphere, b: Sphere) -> bool {
+	return a.id == b.id
+}
+
+cmp_intersection :: proc(a: Intersection, b: Intersection) -> bool {
+	sphere := cmp_sphere(a.object, b.object)
+	t := cmp_float(a.t, b.t)
+	return sphere && t
+}
+
 sqrt :: proc(a: f64) -> f64 {
 	return math.pow(a, 0.5)
 }

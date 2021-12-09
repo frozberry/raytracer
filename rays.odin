@@ -18,8 +18,8 @@ ray_position :: proc(ray: Ray, t: f64) -> Tuple {
 }
 
 // Returns the t values where of an intersection
-intersect :: proc(sphere: Sphere, ray: Ray) -> ([2]f64, bool) {
-	intersections: [2]f64
+intersect :: proc(sphere: Sphere, ray: Ray) -> ([2]Intersection, bool) {
+	intersections: [2]Intersection
 	sphere_to_ray := sub_tuple(ray.origin, new_point(0, 0, 0))
 
 	a := dot(ray.direction, ray.direction)
@@ -35,8 +35,8 @@ intersect :: proc(sphere: Sphere, ray: Ray) -> ([2]f64, bool) {
 	t1 := (-b - math.pow(discriminant, 0.5)) / (2 * a)
 	t2 := (-b + math.pow(discriminant, 0.5)) / (2 * a)
 
-	intersections[0] = t1
-	intersections[1] = t2
+	intersections[0] = new_intersection(t1, sphere) 
+	intersections[1] = new_intersection(t2, sphere)
 
 	return intersections, true
 }
@@ -78,8 +78,8 @@ test_ray_sphere_intersect :: proc() {
 
 	assert(hit)
 
-	assert(cmp_float(xs[0], 4.0))
-	assert(cmp_float(xs[1], 6.0))
+	assert(cmp_float(xs[0].t, 4.0))
+	assert(cmp_float(xs[1].t, 6.0))
 }
 
 test_intersect_tangent :: proc() {
@@ -88,8 +88,8 @@ test_intersect_tangent :: proc() {
 	xs, hit := intersect(s, r)
 
 	assert(hit)
-	assert(cmp_float(xs[0], 5.0))
-	assert(cmp_float(xs[1], 5.0))
+	assert(cmp_float(xs[0].t, 5.0))
+	assert(cmp_float(xs[1].t, 5.0))
 }
 
 test_miss_sphere :: proc() {
@@ -98,8 +98,8 @@ test_miss_sphere :: proc() {
 	xs, hit := intersect(s, r)
 
 	assert(!hit)
-	assert(cmp_float(xs[0], 0))
-	assert(cmp_float(xs[0], 0))
+	assert(cmp_float(xs[0].t, 0))
+	assert(cmp_float(xs[0].t, 0))
 }
 
 
@@ -109,8 +109,8 @@ test_inside_sphere :: proc() {
 	xs, hit := intersect(s, r)
 
 	assert(hit)
-	assert(cmp_float(xs[0], -1.0))
-	assert(cmp_float(xs[1], 1.0))
+	assert(cmp_float(xs[0].t, -1.0))
+	assert(cmp_float(xs[1].t, 1.0))
 }
 
 
@@ -120,7 +120,7 @@ test_sphere_is_behind_ray :: proc() {
 	xs, hit := intersect(s, r)
 
 	assert(hit)
-	assert(cmp_float(xs[0], -6.0))
-	assert(cmp_float(xs[1], -4.0))
+	assert(cmp_float(xs[0].t, -6.0))
+	assert(cmp_float(xs[1].t, -4.0))
 }
 

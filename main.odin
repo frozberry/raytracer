@@ -13,6 +13,7 @@ main :: proc() {
 	matrix_tests()
 	transformation_tests()
 	ray_tests()
+	intersection_tests()
 
 	draw_clock()
 }
