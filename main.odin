@@ -14,6 +14,7 @@ main :: proc() {
 	transformation_tests()
 	ray_tests()
 	intersection_tests()
+	sphere_tests()
 
 	draw_clock()
 }

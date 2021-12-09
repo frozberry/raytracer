@@ -35,7 +35,6 @@ add_tuple :: proc(a: Tuple, b: Tuple) -> Tuple {
 
 sub_tuple :: proc(a: Tuple, b: Tuple) -> Tuple {
 	t := Tuple{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w}
-	assert(!(t.w <0.0))
 	return t
 }
 

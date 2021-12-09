@@ -18,8 +18,13 @@ ray_position :: proc(ray: Ray, t: f64) -> Tuple {
 }
 
 // Returns the t values where of an intersection
-intersect :: proc(sphere: Sphere, ray: Ray) -> ([2]Intersection, bool) {
+intersect :: proc(sphere: Sphere, r: Ray) -> ([2]Intersection, bool) {
 	intersections: [2]Intersection
+
+	// Apply the sphere's transform to the ray
+	ray_transform, _ := inverse_matrix(sphere.transform)
+	ray := transform_ray(r, ray_transform)
+
 	sphere_to_ray := sub_tuple(ray.origin, new_point(0, 0, 0))
 
 	a := dot(ray.direction, ray.direction)
