@@ -68,7 +68,7 @@ draw_projectile :: proc() {
 	}
 
 	ppm := canvas_to_ppm(canvas)
-	os.write_entire_file("projectile.ppm", ppm)
+	os.write_entire_file("../projectile.ppm", ppm)
 }
 
 x_to_width :: proc(x: f64, max: f64) -> int {

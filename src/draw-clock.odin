@@ -28,7 +28,7 @@ draw_clock :: proc() {
 	}
 
 	ppm := canvas_to_ppm(canvas)
-	os.write_entire_file("clock.ppm", ppm)
+	os.write_entire_file("../clock.ppm", ppm)
 	return
 }
 
