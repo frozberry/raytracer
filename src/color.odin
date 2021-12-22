@@ -10,6 +10,8 @@ new_color :: proc(red: f64, green: f64, blue: f64) -> Color {
 	return Color{red, green, blue}
 }
 
+
+
 cmp_color :: proc(a: Color, b: Color) -> bool {
 	red := cmp_float(a.red, b.red)
 	green := cmp_float(a.green, b.green)

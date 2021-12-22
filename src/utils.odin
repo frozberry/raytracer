@@ -10,7 +10,6 @@ abs :: proc(n: f64) -> f64 {
 	}
 }
 
-
 sqrt :: proc(a: f64) -> f64 {
 	return math.pow(a, 0.5)
 }
@@ -40,6 +39,9 @@ clamp_255 :: proc(n: int) -> int {
 }
 
 PI :: math.PI
+root2 := math.pow(f64(2), 0.5)
+root3 := math.pow(f64(3), 0.5)
+
 
 radians :: proc(n: f64) -> f64 {
 	return (n * PI) / 180

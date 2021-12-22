@@ -28,23 +28,13 @@ cmp_tuple :: proc(a: Tuple, b: Tuple) -> bool {
 }
 
 add_tuple :: proc(a: Tuple, b: Tuple) -> Tuple {
-	t := Tuple {
-		a.x + b.x,
-		a.y + b.y,
-		a.z + b.z,
-		a.w + b.w,
-	}
+	t := Tuple{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w}
 	assert(!cmp_float(t.w, 2.0))
 	return t
 }
 
 sub_tuple :: proc(a: Tuple, b: Tuple) -> Tuple {
-	t := Tuple {
-		a.x - b.x,
-		a.y - b.y,
-		a.z - b.z,
-		a.w - b.w,
-	}
+	t := Tuple{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w}
 	return t
 }
 
@@ -78,6 +68,13 @@ cross :: proc(a: Tuple, b: Tuple) -> Tuple {
 	return new_vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x)
 }
 
+reflect :: proc(vec: Tuple, normal: Tuple) -> Tuple {
+	// vec - normal * 2 * dot(in, vec)
+	a := mult_tuple(normal, 2)
+	b := mult_tuple(a, dot(vec, normal))
+	return sub_tuple(vec, b)
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                    Tests                                   */
 /* -------------------------------------------------------------------------- */
@@ -99,25 +96,10 @@ tuple_tests :: proc() {
 	assert(!cmp_tuple(p, v))
 
 	// Add tuples
-	a1 := Tuple {
-		3,
-		-2,
-		5,
-		1,
-	}
-	a2 := Tuple {
-		-2,
-		3,
-		1,
-		0,
-	}
+	a1 := Tuple{3, -2, 5, 1}
+	a2 := Tuple{-2, 3, 1, 0}
 	added := add_tuple(a1, a2)
-	add_expected := Tuple {
-		1,
-		1,
-		6,
-		1,
-	}
+	add_expected := Tuple{1, 1, 6, 1}
 	assert(cmp_tuple(added, add_expected))
 
 	// Sub tuples
@@ -142,7 +124,8 @@ tuple_tests :: proc() {
 	test_cross2()
 
 
-	//
+	test_reflect_45()
+	test_reflect_slanted()
 	return
 }
 
@@ -263,4 +246,18 @@ test_cross2 :: proc() {
 	actual := cross(b, a)
 	expected := new_vector(1, -2, 1)
 	assert(cmp_tuple(actual, expected))
+}
+
+test_reflect_45 :: proc() {
+	v := new_vector(1, -1, 0)
+	n := new_vector(0, 1, 0)
+	r := reflect(v, n)
+	assert(cmp_tuple(r, new_vector(1, 1, 0)))
+}
+
+test_reflect_slanted :: proc() {
+	v := new_vector(0, -1, 0)
+	n := new_vector(root2 / 2, root2 / 2, 0)
+	r := reflect(v, n)
+	assert(cmp_tuple(r, new_vector(1, 0, 0)))
 }
