@@ -18,4 +18,6 @@ main :: proc() {
 	lights_tests()
 	material_tests()
 
+	draw_sphere_3d()
+
 }
