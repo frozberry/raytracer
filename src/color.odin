@@ -18,20 +18,12 @@ cmp_color :: proc(a: Color, b: Color) -> bool {
 }
 
 add_color :: proc(a: Color, b: Color) -> Color {
-	t := Color {
-		a.red + b.red,
-		a.green + b.green,
-		a.blue + b.blue,
-	}
+	t := Color{a.red + b.red, a.green + b.green, a.blue + b.blue}
 	return t
 }
 
 sub_color :: proc(a: Color, b: Color) -> Color {
-	t := Color {
-		a.red - b.red,
-		a.green - b.green,
-		a.blue - b.blue,
-	}
+	t := Color{a.red - b.red, a.green - b.green, a.blue - b.blue}
 	return t
 }
 
@@ -67,11 +59,7 @@ color_tests :: proc() {
 /* -------------------------------------------------------------------------- */
 
 test_init :: proc() {
-	c := Color {
-		-0.5,
-		0.4,
-		1.7,
-	}
+	c := Color{-0.5, 0.4, 1.7}
 	assert(cmp_float(c.red, -0.5))
 	assert(cmp_float(c.green, 0.4))
 	assert(cmp_float(c.blue, 1.7))
