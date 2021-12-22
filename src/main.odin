@@ -16,5 +16,7 @@ main :: proc() {
 	intersection_tests()
 	sphere_tests()
 
-	draw_clock()
+	draw_sphere()
+
+
 }
