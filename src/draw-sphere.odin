@@ -7,7 +7,7 @@ draw_sphere :: proc() {
 	ray_origin := new_point(0, 0, -5)
 	wall_z := 10.0
 	wall_size := 7.0
-	canvas_pixels := 100
+	canvas_pixels := 300
 	pixel_size := wall_size / f64(canvas_pixels)
 	half := wall_size / 2
 	canvas := new_canvas(canvas_pixels, canvas_pixels)
@@ -40,12 +40,16 @@ draw_sphere_3d :: proc() {
 	ray_origin := new_point(0, 0, -5)
 	wall_z := 10.0
 	wall_size := 7.0
-	canvas_pixels := 200
+	canvas_pixels := 300
 
 	pixel_size := wall_size / f64(canvas_pixels)
 	half := wall_size / 2
 
 	canvas := new_canvas(canvas_pixels, canvas_pixels)
+
+	// Shape transform somehow mutates after a lot of iterations
+	// Init a new sphere in the loop avoids the bug
+	// But no idea what's causing it. Nothing is mutating the shape
 
 	shape := new_sphere()
 	shape.material = new_material()
@@ -80,6 +84,7 @@ draw_sphere_3d :: proc() {
 				eye := negate_tuple(ray.direction)
 
 				color := lighting(first_xs.object.material, light, point, eye, normal)
+
 				write_pixel(&canvas, x, y, color)
 			}
 		}
