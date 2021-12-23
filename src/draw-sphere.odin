@@ -2,6 +2,7 @@ package main
 
 import "core:fmt"
 import "core:os"
+import "core:time"
 
 draw_sphere :: proc() {
 	ray_origin := new_point(0, 0, -5)
@@ -37,6 +38,8 @@ draw_sphere :: proc() {
 }
 
 draw_sphere_3d :: proc() {
+	start := time.now()
+
 	ray_origin := new_point(0, 0, -5)
 	wall_z := 10.0
 	wall_size := 7.0
@@ -89,6 +92,10 @@ draw_sphere_3d :: proc() {
 			}
 		}
 	}
+
+	end := time.now()
+	fmt.println(time.diff(start, end))
+
 	ppm := canvas_to_ppm(canvas)
 	os.write_entire_file("../sphere3d.ppm", ppm)
 }
