@@ -14,9 +14,7 @@ new_matrix :: proc {
 
 new_matrix_with_entry :: proc(rows: int, cols: int, entries: []f64) -> Matrix {
 	assert(
-		len(entries) ==
-		rows *
-		cols,
+		len(entries) == rows * cols,
 		"Length of matrix entries should be equal to cols * rows",
 	)
 
@@ -35,7 +33,7 @@ new_empty_matrix :: proc(rows: int, cols: int) -> Matrix {
 // This needs memory allocation since the entries array is not passed in param
 // Still unclear why new_matrix() works without allocation
 new_identity_matrix :: proc() -> Matrix {
-	e := make([]f64, 16, context.temp_allocator)
+	e := make([]f64, 16, context.allocator)
 	e[0] = 1.0
 	e[5] = 1.0
 	e[10] = 1.0
@@ -84,13 +82,13 @@ mult_matrix :: proc(m1: Matrix, m2: Matrix) -> Matrix {
 
 mult_matrix_by_tuple :: proc(m: Matrix, t: Tuple) -> Tuple {
 	a := read_matrix(m, 0, 0) * t.x + read_matrix(m, 0, 1) * t.y + read_matrix(m, 0, 2) * t.z +
-	      read_matrix(m, 0, 3) * t.w
+      read_matrix(m, 0, 3) * t.w
 	b := read_matrix(m, 1, 0) * t.x + read_matrix(m, 1, 1) * t.y + read_matrix(m, 1, 2) * t.z +
-	      read_matrix(m, 1, 3) * t.w
+      read_matrix(m, 1, 3) * t.w
 	c := read_matrix(m, 2, 0) * t.x + read_matrix(m, 2, 1) * t.y + read_matrix(m, 2, 2) * t.z +
-	      read_matrix(m, 2, 3) * t.w
+      read_matrix(m, 2, 3) * t.w
 	d := read_matrix(m, 3, 0) * t.x + read_matrix(m, 3, 1) * t.y + read_matrix(m, 3, 2) * t.z +
-	      read_matrix(m, 3, 3) * t.w
+      read_matrix(m, 3, 3) * t.w
 	return Tuple{a, b, c, d}
 }
 
@@ -212,24 +210,7 @@ matrix_tests :: proc() {
 }
 
 test_read_matrix :: proc() {
-	e := []f64 {
-		1,
-		2,
-		3,
-		4,
-		5.5,
-		6.5,
-		7.5,
-		8.5,
-		9,
-		10,
-		11,
-		12,
-		13.5,
-		14.5,
-		15.5,
-		16.5,
-	}
+	e := []f64{1, 2, 3, 4, 5.5, 6.5, 7.5, 8.5, 9, 10, 11, 12, 13.5, 14.5, 15.5, 16.5}
 	m := new_matrix(4, 4, e)
 
 	assert(cmp_float(read_matrix(m, 0, 0), 1))
@@ -269,12 +250,7 @@ test_index_to_rc :: proc() {
 }
 
 test_two_by_two_matrix :: proc() {
-	e := []f64 {
-		-3,
-		5,
-		1,
-		-2,
-	}
+	e := []f64{-3, 5, 1, -2}
 	m := new_matrix(2, 2, e)
 
 	assert(cmp_float(read_matrix(m, 0, 0), -3))
@@ -284,17 +260,7 @@ test_two_by_two_matrix :: proc() {
 }
 
 test_three_by_three_matrix :: proc() {
-	e := []f64 {
-		-3,
-		5,
-		0,
-		1,
-		-2,
-		-7,
-		0,
-		1,
-		1,
-	}
+	e := []f64{-3, 5, 0, 1, -2, -7, 0, 1, 1}
 	m := new_matrix(3, 3, e)
 
 	assert(cmp_float(read_matrix(m, 0, 0), -3))
@@ -303,64 +269,19 @@ test_three_by_three_matrix :: proc() {
 }
 
 test_cmp_matrix :: proc() {
-	e := []f64 {
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9,
-	}
+	e := []f64{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	m := new_matrix(3, 3, e)
 
-	e1 := []f64 {
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9,
-	}
+	e1 := []f64{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	m1 := new_matrix(3, 3, e1)
 
-	e2 := []f64 {
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9000,
-	}
+	e2 := []f64{1, 2, 3, 4, 5, 6, 7, 8, 9000}
 	m2 := new_matrix(3, 3, e2)
 
-	e3 := []f64 {
-		1,
-		2,
-		3,
-		4,
-	}
+	e3 := []f64{1, 2, 3, 4}
 	m3 := new_matrix(2, 2, e3)
 
-	e4 := []f64 {
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9.000001,
-	}
+	e4 := []f64{1, 2, 3, 4, 5, 6, 7, 8, 9.000001}
 	m4 := new_matrix(3, 3, e4)
 
 	assert(cmp_matrix(m, m1))
@@ -370,88 +291,20 @@ test_cmp_matrix :: proc() {
 }
 
 test_mult_matrix :: proc() {
-	e1 := []f64 {
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9,
-		8,
-		7,
-		6,
-		5,
-		4,
-		3,
-		2,
-	}
+	e1 := []f64{1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2}
 	m1 := new_matrix(4, 4, e1)
 
-	e2 := []f64 {
-		-2,
-		1,
-		2,
-		3,
-		3,
-		2,
-		1,
-		-1,
-		4,
-		3,
-		6,
-		5,
-		1,
-		2,
-		7,
-		8,
-	}
+	e2 := []f64{-2, 1, 2, 3, 3, 2, 1, -1, 4, 3, 6, 5, 1, 2, 7, 8}
 	m2 := new_matrix(4, 4, e2)
 
-	e3 := []f64 {
-		20,
-		22,
-		50,
-		48,
-		44,
-		54,
-		114,
-		108,
-		40,
-		58,
-		110,
-		102,
-		16,
-		26,
-		46,
-		42,
-	}
+	e3 := []f64{20, 22, 50, 48, 44, 54, 114, 108, 40, 58, 110, 102, 16, 26, 46, 42}
 	m3 := new_matrix(4, 4, e3)
 
 	assert(cmp_matrix(m3, mult_matrix(m1, m2)))
 }
 
 test_mult_matrix_by_tuple :: proc() {
-	e := []f64 {
-		1,
-		2,
-		3,
-		4,
-		2,
-		4,
-		4,
-		2,
-		8,
-		6,
-		4,
-		1,
-		0,
-		0,
-		0,
-		1,
-	}
+	e := []f64{1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1}
 	m := new_matrix(4, 4, e)
 
 	t := new_tuple(1, 2, 3, 1)
@@ -463,24 +316,7 @@ test_mult_matrix_by_tuple :: proc() {
 }
 
 test_identity :: proc() {
-	e := []f64 {
-		1,
-		2,
-		3,
-		4,
-		2,
-		4,
-		4,
-		2,
-		8,
-		6,
-		4,
-		1,
-		0,
-		0,
-		0,
-		1,
-	}
+	e := []f64{1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1}
 	m := new_matrix(4, 4, e)
 	i := new_identity_matrix()
 
