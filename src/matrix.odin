@@ -40,6 +40,7 @@ new_identity_matrix :: proc() -> Matrix {
 	e[5] = 1.0
 	e[10] = 1.0
 	e[15] = 1.0
+
 	return new_matrix(4, 4, e)
 }
 

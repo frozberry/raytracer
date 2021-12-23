@@ -43,7 +43,7 @@ draw_sphere_3d :: proc() {
 	ray_origin := new_point(0, 0, -5)
 	wall_z := 10.0
 	wall_size := 7.0
-	canvas_pixels := 500
+	canvas_pixels := 1000
 
 	pixel_size := wall_size / f64(canvas_pixels)
 	half := wall_size / 2
@@ -59,8 +59,11 @@ draw_sphere_3d :: proc() {
 	shape.material.diffuse = 0.9
 	shape.material.specular = 0.9
 
-	t := new_scaling(1.0, 0.5, 0.5)
-	set_transform(&shape, t)
+	scaling := new_scaling(0.9, 0.9, 0.9)
+	translate := new_translation(0.2, 0, 0)
+	transform := combine_transformations(scaling, translate)
+
+	set_transform(&shape, transform)
 
 	light_position := new_point(-10, 10, -10)
 	light_color := new_color(1, 1, 1)
@@ -71,6 +74,10 @@ draw_sphere_3d :: proc() {
 		world_y := half - pixel_size * f64(y)
 
 		for x in 0 ..< canvas_pixels {
+			pixel_num := y * canvas_pixels + x
+			if pixel_num % 10000 == 0 {
+				fmt.println(pixel_num, "/", canvas_pixels * canvas_pixels)
+			}
 			world_x := -half + pixel_size * f64(x)
 
 			destination := new_point(world_x, world_y, wall_z)
@@ -93,8 +100,7 @@ draw_sphere_3d :: proc() {
 		}
 	}
 
-	end := time.now()
-	fmt.println(time.diff(start, end))
+	fmt.println(time.since(start))
 
 	ppm := canvas_to_ppm(canvas)
 	os.write_entire_file("../sphere3d.ppm", ppm)
