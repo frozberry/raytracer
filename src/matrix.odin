@@ -32,6 +32,8 @@ new_empty_matrix :: proc(rows: int, cols: int) -> Matrix {
 
 // This needs memory allocation since the entries array is not passed in param
 // Still unclear why new_matrix() works without allocation
+
+// This causes draw 3D sphere to break, the transform matrix changes
 new_identity_matrix :: proc() -> Matrix {
 	e := make([]f64, 16, context.allocator)
 	e[0] = 1.0

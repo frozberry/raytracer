@@ -40,17 +40,14 @@ draw_sphere_3d :: proc() {
 	ray_origin := new_point(0, 0, -5)
 	wall_z := 10.0
 	wall_size := 7.0
-	canvas_pixels := 300
+	canvas_pixels := 500
 
 	pixel_size := wall_size / f64(canvas_pixels)
 	half := wall_size / 2
 
 	canvas := new_canvas(canvas_pixels, canvas_pixels)
 
-	// Shape transform somehow mutates after a lot of iterations
-	// Init a new sphere in the loop avoids the bug
-	// But no idea what's causing it. Nothing is mutating the shape
-
+	// Fixed now with context.allocator instead of temp_allocator
 	shape := new_sphere()
 	shape.material = new_material()
 	shape.material.color = new_color(0.2, 0.5, 1)
@@ -59,12 +56,15 @@ draw_sphere_3d :: proc() {
 	shape.material.diffuse = 0.9
 	shape.material.specular = 0.9
 
+	t := new_scaling(1.0, 0.5, 0.5)
+	set_transform(&shape, t)
+
 	light_position := new_point(-10, 10, -10)
 	light_color := new_color(1, 1, 1)
 	light := new_point_light(light_position, light_color)
 
+
 	for y in 0 ..< canvas_pixels {
-		// Flip y-axis
 		world_y := half - pixel_size * f64(y)
 
 		for x in 0 ..< canvas_pixels {
