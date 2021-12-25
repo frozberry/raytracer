@@ -53,7 +53,7 @@ draw_sphere_3d :: proc(canvas_size: int) {
 	// Fixed now with context.allocator instead of temp_allocator
 	shape := new_sphere()
 	shape.material = new_material()
-	shape.material.color = new_color(0.2, 0.5, 1)
+	shape.material.color = new_color(0.2, 0.5, 0)
 	shape.material.shininess = 200
 	shape.material.ambient = 0.1
 	shape.material.diffuse = 0.9

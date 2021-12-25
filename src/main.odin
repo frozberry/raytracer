@@ -23,16 +23,16 @@ main :: proc() {
 
 	context.allocator = my_allocator(&ma)
 
-	tuple_tests()
-	color_tests()
-	canvas_tests()
-	matrix_tests()
-	transformation_tests()
-	ray_tests()
-	intersection_tests()
-	sphere_tests()
-	lights_tests()
-	material_tests()
+	// tuple_tests()
+	// color_tests()
+	// canvas_tests()
+	// matrix_tests()
+	// transformation_tests()
+	// ray_tests()
+	// intersection_tests()
+	// sphere_tests()
+	// lights_tests()
+	// material_tests()
 
 	draw_sphere_3d(200)
 }

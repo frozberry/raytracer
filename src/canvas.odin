@@ -45,21 +45,36 @@ color_to_string :: proc(color: Color) -> string {
 }
 
 canvas_to_ppm :: proc(canvas: Canvas) -> []u8 {
-	ppm := [dynamic]u8{}
+	pixels := (canvas.width * canvas.height)
+
+
+	// Each pixel could contain up to 9 bytes for RGB info, plus 3 for space/newline
+	pixels_memory := pixels * (9 + 2)
+	// Arbitary header size
+	header := 100
+
+	ppm_size := pixels_memory + header
+
+	ppm := make([]u8, ppm_size)
 
 	width := fmt.tprintf("%v ", canvas.width)
 	height := fmt.tprintf("%v\n", canvas.height)
 
-	append_bytes(&ppm, "P3\n")
-	append_bytes(&ppm, width)
-	append_bytes(&ppm, height)
-	append_bytes(&ppm, "255\n")
+	i := 0
+
+	append_string_to_array(&ppm, "P3\n", &i)
+	append_string_to_array(&ppm, width, &i)
+	append_string_to_array(&ppm, height, &i)
+	append_string_to_array(&ppm, "255\n", &i)
 
 	for p in canvas.pixels {
-		append_bytes(&ppm, color_to_string(p))
-		append_bytes(&ppm, "\n")
+		append_string_to_array(&ppm, color_to_string(p), &i)
+		append_string_to_array(&ppm, "\n", &i)
 	}
-	return ppm[:]
+
+	// This leads to 0s at the end because exact length depends on the colors.
+	// Is it better to just use dynamic here?
+	return ppm[0:i]
 }
 
 /* -------------------------------------------------------------------------- */

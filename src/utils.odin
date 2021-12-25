@@ -18,9 +18,11 @@ sqr :: proc(a: f64) -> f64 {
 	return math.pow(a, 2.0)
 }
 
-append_bytes :: proc(arr: ^[dynamic]u8, add: string) {
-	for i in add {
-		append(arr, cast(u8)i)
+append_string_to_array :: proc(arr: ^[]u8, add: string, index: ^int) {
+	for char_rune in add {
+		b := cast(u8)char_rune
+		arr[index^] = b
+		index^ += 1
 	}
 }
 

@@ -45,6 +45,7 @@ my_allocator_proc :: proc(
 		}
 
 	case .Resize:
+		fmt.println("resize called", loc)
 		return mem.default_resize_bytes_align(
 			mem.byte_slice(old_memory, old_size),
 			size,
