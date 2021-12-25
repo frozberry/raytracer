@@ -22,9 +22,10 @@ new_matrix_with_entry :: proc(rows: int, cols: int, entries: []f64) -> Matrix {
 }
 
 new_empty_matrix :: proc(rows: int, cols: int) -> Matrix {
-	e := [dynamic]f64{}
+	size := rows * cols
+	e := make([]f64, size)
 	for i in 0 ..< rows * cols {
-		append(&e, 0)
+		e[i] = 0
 	}
 
 	return Matrix{rows, cols, e[:]}
