@@ -3,7 +3,6 @@ package main
 import "core:mem"
 import "core:fmt"
 
-
 my_allocator_proc :: proc(
 	allocator_data: rawptr,
 	mode: mem.Allocator_Mode,

@@ -37,13 +37,13 @@ draw_sphere :: proc() {
 	os.write_entire_file("../sphere.ppm", ppm)
 }
 
-draw_sphere_3d :: proc() {
+draw_sphere_3d :: proc(canvas_size: int) {
 	start := time.now()
 
 	ray_origin := new_point(0, 0, -5)
 	wall_z := 10.0
 	wall_size := 7.0
-	canvas_pixels := 200
+	canvas_pixels := canvas_size
 
 	pixel_size := wall_size / f64(canvas_pixels)
 	half := wall_size / 2
