@@ -133,16 +133,18 @@ determinate :: proc(m: Matrix) -> f64 {
 submatrix :: proc(m: Matrix, row: int, col: int) -> Matrix {
 	assert(row <= m.rows && col <= m.cols, "row or col is not in matrix")
 
-	e := [dynamic]f64{}
+	sub := make([]f64, (m.rows - 1) * (m.cols - 1))
+	sub_index := 0
 	for v, i in m.entries {
 		r, c := index_to_row_col(m, i)
 		if r == row || c == col {
 			continue
 		}
-		append(&e, v)
+		sub[sub_index] = v
+		sub_index += 1
 	}
 
-	return new_matrix(m.rows - 1, m.cols - 1, e[:])
+	return new_matrix(m.rows - 1, m.cols - 1, sub)
 }
 
 minor :: proc(m: Matrix, row: int, col: int) -> f64 {
