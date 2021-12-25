@@ -17,7 +17,7 @@ my_allocator_proc :: proc(
 ) {
 
 	allocator := cast(^My_Allocator)allocator_data
-	// if size > 1024 {
+	// if size > 1024000 {
 	// fmt.printf(
 	// 	"{}/{} bytes. {} bytes. {}\n",
 	// 	allocator.offset,
@@ -27,18 +27,28 @@ my_allocator_proc :: proc(
 	// )
 	// }
 
+	if size == 1337 {
+		fmt.println(allocator.offset, " bytes used before the loop")
+	}
+
+
 	switch mode {
 	case .Alloc:
 		{
 			// start := math.next_power_of_two(allocator.offset)
 			start := allocator.offset
-			end := start + size
-			allocator.offset = end
 
-			if allocator.offset + size > allocator.capactiy {
+			if start + size > allocator.capactiy {
 				fmt.println("No more memory")
 				assert(false)
 				return []byte{}, .Out_Of_Memory
+			}
+
+			end := start + size
+			allocator.offset = end
+
+			if allocator.offset > MAX_MEM {
+				MAX_MEM = allocator.offset
 			}
 
 			return allocator.memory[start:end], nil
@@ -58,7 +68,9 @@ my_allocator_proc :: proc(
 
 	case .Free_All:
 		{
-			allocator.offset = 0
+			//I'm using this to only free everything in the loop, 
+			// Found this value by logging on line 30
+			allocator.offset = 24000512
 			return nil, nil
 		}
 

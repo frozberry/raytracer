@@ -7,8 +7,11 @@ import "core:math"
 import "core:time"
 import "core:mem"
 
+MAX_MEM: int
+
 main :: proc() {
-	TOTAL_MEMORY := mem.gigabytes(2)
+	TOTAL_MEMORY := mem.megabytes(35)
+
 	ma: My_Allocator
 	ma.capactiy = TOTAL_MEMORY
 
@@ -20,8 +23,8 @@ main :: proc() {
 	ma.memory, err = mem.alloc_bytes(TOTAL_MEMORY)
 
 	assert(err == .None, "Unable to allocate memory")
-
 	context.allocator = my_allocator(&ma)
+
 
 	// tuple_tests()
 	// color_tests()
@@ -34,5 +37,7 @@ main :: proc() {
 	// lights_tests()
 	// material_tests()
 
-	draw_sphere_3d(200)
+
+	draw_sphere_3d(1000)
+	fmt.println("Maximum memory used at any point in the program", MAX_MEM, "b")
 }

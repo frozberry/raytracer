@@ -3,6 +3,7 @@ package main
 import "core:fmt"
 import "core:os"
 import "core:time"
+import "core:mem"
 
 draw_sphere :: proc() {
 	ray_origin := new_point(0, 0, -5)
@@ -50,10 +51,11 @@ draw_sphere_3d :: proc(canvas_size: int) {
 
 	canvas := new_canvas(canvas_pixels, canvas_pixels)
 
+
 	// Fixed now with context.allocator instead of temp_allocator
 	shape := new_sphere()
 	shape.material = new_material()
-	shape.material.color = new_color(0.2, 0.5, 0)
+	shape.material.color = new_color(0.2, 0.5, 1)
 	shape.material.shininess = 200
 	shape.material.ambient = 0.1
 	shape.material.diffuse = 0.9
@@ -69,6 +71,8 @@ draw_sphere_3d :: proc(canvas_size: int) {
 	light_color := new_color(1, 1, 1)
 	light := new_point_light(light_position, light_color)
 
+	// Used to log the memory used before entering the loop. L31 in allocator.odin
+	f := make([]u8, 1337)
 
 	for y in 0 ..< canvas_pixels {
 		world_y := half - pixel_size * f64(y)
@@ -98,6 +102,7 @@ draw_sphere_3d :: proc(canvas_size: int) {
 				write_pixel(&canvas, x, y, color)
 			}
 		}
+		free_all()
 	}
 
 	fmt.println(time.since(start))
