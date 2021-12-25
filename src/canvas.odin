@@ -9,11 +9,12 @@ Canvas :: struct {
 }
 
 new_canvas :: proc(width: int, height: int) -> Canvas {
-	p := [dynamic]Color{}
+	size := width * height
+	p := make([]Color, size)
 	black := new_color(0, 0, 0)
 
 	for i in 0 ..< width * height {
-		append(&p, black)
+		p[i] = black
 	}
 	return Canvas{width, height, p[:]}
 }
@@ -111,7 +112,7 @@ test_write_ppm :: proc() {
 	write_pixel(&canvas, 4, 2, c)
 
 	ppm := canvas_to_ppm(canvas)
-	expected := []u8 {
+	expected := []u8{
 		80,
 		51,
 		10,

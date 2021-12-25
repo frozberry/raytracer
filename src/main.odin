@@ -7,9 +7,8 @@ import "core:math"
 import "core:time"
 import "core:mem"
 
-
 main :: proc() {
-	TOTAL_MEMORY := mem.gigabytes(10)
+	TOTAL_MEMORY := mem.gigabytes(2)
 	ma: My_Allocator
 	ma.capactiy = TOTAL_MEMORY
 
